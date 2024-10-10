@@ -2235,6 +2235,7 @@ xla_cc_test(
         "//xla/hlo/pass:hlo_pass_pipeline",
         "//xla/service:algebraic_simplifier",
         "//xla/service:hlo_module_config",
+        "//xla/service/spmd/shardy:constants",
         "//xla/stream_executor:device_description",
         "//xla/tests:hlo_test_base",
         "//xla/tests:xla_internal_test_main",
@@ -2891,7 +2892,6 @@ xla_test(
         "//xla/stream_executor:device_description",
         "//xla/stream_executor:platform",
         "//xla/stream_executor:stream_executor_h",
-        "//xla/stream_executor/gpu:gpu_timer",
         "//xla/stream_executor/gpu:mock_gpu_executor",
         "//xla/tests:filecheck",
         "//xla/tests:hlo_test_base",
@@ -3009,6 +3009,39 @@ xla_cc_test(
         "//xla/tests:hlo_test_base",
         "@com_google_googletest//:gtest_main",
         "@local_tsl//tsl/platform:status",
+        "@local_tsl//tsl/platform:statusor",
+        "@local_tsl//tsl/platform:test",
+    ],
+)
+
+cc_library(
+    name = "gpu_collective_combiner_utils",
+    srcs = ["gpu_collective_combiner_utils.cc"],
+    hdrs = ["gpu_collective_combiner_utils.h"],
+    deps = [
+        "//xla/hlo/ir:hlo",
+        "//xla/service:collective_utils",
+        "//xla/stream_executor:device_description",
+        "@com_google_absl//absl/log",
+        "@com_google_absl//absl/status:statusor",
+    ],
+)
+
+xla_cc_test(
+    name = "gpu_collective_combiner_utils_test",
+    srcs = ["gpu_collective_combiner_utils_test.cc"],
+    deps = [
+        ":gpu_collective_combiner_utils",
+        ":gpu_hlo_schedule",
+        "//xla/hlo/ir:hlo",
+        "//xla/service:collective_utils",
+        "//xla/service:hlo_module_config",
+        "//xla/stream_executor:device_description",
+        "//xla/tests:hlo_test_base",
+        "@com_google_absl//absl/status",
+        "@com_google_absl//absl/status:statusor",
+        "@com_google_absl//absl/strings:string_view",
+        "@com_google_googletest//:gtest_main",
         "@local_tsl//tsl/platform:statusor",
         "@local_tsl//tsl/platform:test",
     ],
